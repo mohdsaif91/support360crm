@@ -1,0 +1,53 @@
+*,
+*:after,
+*::before {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: "Roboto", sans-serif;
+  font-size: 0.9325rem;
+  background-color: #f0f2f5;
+}
+
+@import "./SCSS/variable";
+
+@import "./SCSS/header";
+@import "./SCSS/filterComponent";
+@import "./SCSS/modalPopup";
+
+.icon {
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
+}
+
+.btn {
+  min-width: 120px;
+  font-size: 16px;
+  padding: 16px 24px;
+  cursor: pointer;
+  border-radius: 10%;
+  font-weight: 600;
+  border: none;
+}
+
+.logo-icon {
+  height: 70px;
+  width: 60px;
+  cursor: pointer;
+}
+
+.error-text {
+  color: red;
+}
+
+.input-text {
+  margin: 4px 0;
+  height: 40px;
+  width: 250px;
+  border: none;
+  background-color: #c0c1c5;
+  border-radius: 7px;
+}

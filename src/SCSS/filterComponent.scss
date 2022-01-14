@@ -1,0 +1,19 @@
+.filter {
+  .filterComponent {
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem 1rem;
+    .actio-container {
+      .add-btn {
+        background-color: $addbuttoncolor;
+        color: $white-color;
+      }
+    }
+  }
+  .modal-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+  }
+}

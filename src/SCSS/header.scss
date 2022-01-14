@@ -1,0 +1,23 @@
+.header {
+  background-color: $header-Color;
+  display: flex;
+  justify-content: space-between;
+  .logo {
+    margin-left: 1rem;
+    display: flex;
+    // justify-content: center;
+    align-items: center;
+    h6 {
+      margin-left: 1rem;
+      font-size: 1.5rem;
+      color: seashell;
+    }
+    .logo-img {
+    }
+  }
+  .login-container {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+  }
+}
