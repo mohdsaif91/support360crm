@@ -1,6 +1,13 @@
 import React, { useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 
 import CloseIcon from "../Images/close.png";
+import { addCustomer } from "../Redux/Slices/CustomerSlice";
+import {
+  cardExpiryValidation,
+  emailValidation,
+  phoneValidation,
+} from "../util/util";
 
 const initialFormData = {
   agentName: "",
@@ -20,33 +27,119 @@ const initialFormData = {
   amount: "",
 };
 
+const initialFormDataFocus = {
+  agentName: false,
+  cardNumber: false,
+  cardExp: false,
+  cardCVV: false,
+  customerName: false,
+  billingAddress: false,
+  city: false,
+  state: false,
+  zipCode: false,
+  phoneNumber: false,
+  shippingAddress: false,
+  email: false,
+  productName: false,
+  quantity: false,
+  amount: false,
+};
+
+const validationData = {
+  emailValid: false,
+  phoneValid: false,
+  cardNumber: false,
+  cardExpiry: false,
+};
+
 export default function ModalPopUp(props) {
   const [formData, setFormData] = useState({ ...initialFormData });
+  const [error, setError] = useState(false);
+  const [focus, setFocus] = useState({ ...initialFormDataFocus });
+  const [validation, setValidation] = useState({ ...validationData });
+
+  const dispatch = useDispatch();
 
   const heandleOnChange = (e) => {
+    if (e.target.name == "email") {
+      console.log(emailValidation(e.target.value));
+      if (!emailValidation(e.target.value)) {
+        setValidation({ ...validation, emailValid: true });
+      } else {
+        setValidation({ ...validation, emailValid: false });
+      }
+    }
+    if (e.target.name == "phoneNumber") {
+      console.log(phoneValidation(e.target.value));
+      if (phoneValidation(e.target.value)) {
+        console.log("valid");
+        setValidation({ ...validation, phoneValid: false });
+      } else {
+        console.log("Invalid");
+        setValidation({ ...validation, phoneValid: true });
+      }
+    }
+    if (e.target.name == "cardNumber") {
+      if (e.target.value.length === 16) {
+        setValidation({ ...validation, cardNumber: false });
+      } else {
+        setValidation({ ...validation, cardNumber: true });
+      }
+    }
+    if (e.target.name == "cardExp") {
+      if (cardExpiryValidation(e.target.value)) {
+        setValidation({ ...validation, cardExpiry: false });
+      } else {
+        setValidation({ ...validation, cardExpiry: true });
+      }
+    }
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  const submitData = () => {};
 
-  const checkAllFeilds = () => {
-    const {
-      agentName,
-      cardNumber,
-      cardExp,
-      cardCVV,
-      customerName,
-      billingAddress,
-      city,
-      state,
-      zipCode,
-      phoneNumber,
-      shippingAddress,
-      email,
-      productName,
-      quantity,
-      amount,
-    } = formData;
+  const checkforEmpty = () => {
+    if (
+      formData.agentName === "" ||
+      formData.cardNumber === "" ||
+      formData.cardExp === "" ||
+      formData.cardCVV === "" ||
+      formData.customerName === "" ||
+      formData.billingAddress === "" ||
+      formData.city === "" ||
+      formData.state === "" ||
+      formData.zipCode === "" ||
+      formData.phoneNumber === "" ||
+      formData.shippingAddress === "" ||
+      formData.email === "" ||
+      formData.productName === "" ||
+      formData.quantity === "" ||
+      formData.amount === ""
+    ) {
+      setError(true);
+      return true;
+    } else {
+      setError(false);
+      return false;
+    }
   };
+
+  const submitData = () => {
+    console.log("called !!");
+    if (checkforEmpty()) {
+      console.log("called !!2");
+    } else {
+      console.log("Valid And Valid !");
+      console.log(formData);
+      dispatch(addCustomer(formData));
+    }
+  };
+
+  const focusEvent = (e) => {
+    if (formData[e.target.name] === "") {
+      setFocus({ ...focus, [e.target.name]: true });
+    }
+  };
+
+  console.log(validation);
 
   return (
     <div className="modal-popup">
@@ -66,12 +159,20 @@ export default function ModalPopUp(props) {
               <label>Required</label>
             </div>
             <input
-              className={`input-text`}
+              onBlur={(e) => focusEvent(e)}
+              className={`${
+                formData.customerName === "" &&
+                focus.customerName &&
+                "input-error"
+              } input-text`}
               name="customerName"
               type="text"
               value={formData.customerName}
               onChange={(e) => heandleOnChange(e)}
             />
+            {formData.customerName === "" && focus.customerName && (
+              <div className="error-text">Customer name Required !</div>
+            )}
           </div>
           <div className="input-item">
             <div className="input-label">
@@ -79,12 +180,21 @@ export default function ModalPopUp(props) {
               <label>Required</label>
             </div>
             <input
+              onBlur={(e) => focusEvent(e)}
               name="cardNumber"
-              className={`input-text`}
+              className={`${
+                formData.cardNumber === "" && focus.cardNumber && "input-error"
+              } input-text`}
               type="text"
               value={formData.cardNumber}
               onChange={(e) => heandleOnChange(e)}
             />
+            {formData.cardNumber === "" && focus.cardNumber && (
+              <div className="error-text">Card number Required !</div>
+            )}
+            {validation.cardNumber && (
+              <div className="error-text">Invalid Card number !</div>
+            )}
           </div>
           <div className="input-item">
             <div className="input-label">
@@ -92,12 +202,18 @@ export default function ModalPopUp(props) {
               <label>Required</label>
             </div>
             <input
-              className={`input-text`}
+              onBlur={(e) => focusEvent(e)}
+              className={`${
+                formData.cardCVV === "" && focus.cardCVV && "input-error"
+              } input-text`}
               type="text"
               name="cardCVV"
               value={formData.cardCVV}
               onChange={(e) => heandleOnChange(e)}
             />
+            {formData.cardCVV === "" && focus.cardCVV && (
+              <div className="error-text">Card CVV Required !</div>
+            )}
           </div>
           <div className="input-item">
             <div className="input-label">
@@ -105,12 +221,21 @@ export default function ModalPopUp(props) {
               <label>Required</label>
             </div>
             <input
-              className={`input-text`}
+              onBlur={(e) => focusEvent(e)}
+              className={`${
+                formData.cardExp === "" && focus.cardExp && "input-error"
+              } input-text`}
               type="text"
               name="cardExp"
               value={formData.cardExp}
               onChange={(e) => heandleOnChange(e)}
             />
+            {formData.cardExp === "" && focus.cardExp && (
+              <div className="error-text">Card Expiry Required !</div>
+            )}
+            {validation.cardExpiry && (
+              <div className="error-text">Invalid date !</div>
+            )}
           </div>
         </div>
         <div>
@@ -120,12 +245,20 @@ export default function ModalPopUp(props) {
               <label>Required</label>
             </div>
             <input
-              className={`input-text`}
+              onBlur={(e) => focusEvent(e)}
+              className={`${
+                formData.productName === "" &&
+                focus.productName &&
+                "input-error"
+              } input-text`}
               type="text"
               name="productName"
               value={formData.productName}
               onChange={(e) => heandleOnChange(e)}
             />
+            {formData.productName === "" && focus.productName && (
+              <div className="error-text">Product Name Required !</div>
+            )}
           </div>
           <div className="input-item">
             <div className="input-label">
@@ -133,25 +266,37 @@ export default function ModalPopUp(props) {
               <label>Required</label>
             </div>
             <input
-              className={`input-text`}
+              onBlur={(e) => focusEvent(e)}
+              className={`${
+                formData.quantity === "" && focus.quantity && "input-error"
+              } input-text`}
               type="text"
               name="quantity"
               value={formData.quantity}
               onChange={(e) => heandleOnChange(e)}
             />
+            {formData.quantity === "" && focus.quantity && (
+              <div className="error-text">Product quantity required !</div>
+            )}
           </div>
           <div className="input-item">
             <div className="input-label">
-              <label>product Amount</label>
+              <label>Product Amount</label>
               <label>Required</label>
             </div>
             <input
-              className={`input-text`}
+              onBlur={(e) => focusEvent(e)}
+              className={`${
+                formData.amount === "" && focus.amount && "input-error"
+              } input-text`}
               type="text"
               name="amount"
               value={formData.amount}
               onChange={(e) => heandleOnChange(e)}
             />
+            {formData.amount === "" && focus.amount && (
+              <div className="error-text">Product amount Required !</div>
+            )}
           </div>
           <div className="input-item">
             <div className="input-label">
@@ -159,11 +304,18 @@ export default function ModalPopUp(props) {
               <label>Required</label>
             </div>
             <input
-              className={`input-text`}
+              onBlur={(e) => focusEvent(e)}
+              className={`${
+                formData.agentName === "" && focus.agentName && "input-error"
+              } input-text`}
               type="text"
+              name="agentName"
               value={formData.agentName}
               onChange={(e) => heandleOnChange(e)}
             />
+            {formData.agentName === "" && focus.agentName && (
+              <div className="error-text">Agent name Required !</div>
+            )}
           </div>
         </div>
         <div>
@@ -173,12 +325,18 @@ export default function ModalPopUp(props) {
               <label>Required</label>
             </div>
             <input
-              className={`input-text`}
+              onBlur={(e) => focusEvent(e)}
+              className={`${
+                formData.city === "" && focus.city && "input-error"
+              } input-text`}
               type="text"
               name="city"
               value={formData.city}
               onChange={(e) => heandleOnChange(e)}
             />
+            {formData.city === "" && focus.city && (
+              <div className="error-text">City Required !</div>
+            )}
           </div>
           <div className="input-item">
             <div className="input-label">
@@ -186,12 +344,18 @@ export default function ModalPopUp(props) {
               <label>Required</label>
             </div>
             <input
-              className={`input-text`}
+              onBlur={(e) => focusEvent(e)}
+              className={`${
+                formData.zipCode === "" && focus.zipCode && "input-error"
+              } input-text`}
               type="text"
               name="zipCode"
               value={formData.zipCode}
               onChange={(e) => heandleOnChange(e)}
             />
+            {formData.zipCode === "" && focus.zipCode && (
+              <div className="error-text">Zipcode Required !</div>
+            )}
           </div>
           <div className="input-item">
             <div className="input-label">
@@ -199,12 +363,18 @@ export default function ModalPopUp(props) {
               <label>Required</label>
             </div>
             <input
+              onBlur={(e) => focusEvent(e)}
               name="state"
-              className={`input-text`}
+              className={`${
+                formData.state === "" && focus.state && "input-error"
+              } input-text`}
               type="text"
               value={formData.state}
               onChange={(e) => heandleOnChange(e)}
             />
+            {formData.state === "" && focus.state && (
+              <div className="error-text">State Required !</div>
+            )}
           </div>
           <div className="input-item">
             <div className="input-label">
@@ -212,13 +382,21 @@ export default function ModalPopUp(props) {
               <label>Required</label>
             </div>
             <textarea
-              className={`input-text width-auto`}
+              onBlur={(e) => focusEvent(e)}
+              className={`${
+                formData.billingAddress === "" &&
+                focus.billingAddress &&
+                "input-error"
+              } input-text width-auto`}
               name="billingAddress"
               cols={4}
               rows={4}
               value={formData.billingAddress}
               onChange={(e) => heandleOnChange(e)}
             />
+            {formData.billingAddress === "" && focus.billingAddress && (
+              <div className="error-text">Billing address Required !</div>
+            )}
           </div>
         </div>
         <div>
@@ -228,12 +406,22 @@ export default function ModalPopUp(props) {
               <label>Required</label>
             </div>
             <input
-              className={`input-text`}
+              className={`${
+                (formData.email === "" && focus.email && "input-error") ||
+                (validation.emailValid && "input-error")
+              } input-text`}
               type="text"
+              onBlur={(e) => focusEvent(e)}
               name="email"
               value={formData.email}
               onChange={(e) => heandleOnChange(e)}
             />
+            {formData.email === "" && focus.email && (
+              <div className="error-text">Email id Required !</div>
+            )}
+            {validation.emailValid && (
+              <div className="error-text">Email is invalid !</div>
+            )}
           </div>
           <div className="input-item">
             <div className="input-label">
@@ -241,12 +429,23 @@ export default function ModalPopUp(props) {
               <label>Required</label>
             </div>
             <input
-              className={`input-text`}
+              className={`${
+                formData.phoneNumber === "" &&
+                focus.phoneNumber &&
+                "input-error"
+              } input-text`}
               type="text"
+              onBlur={(e) => focusEvent(e)}
               name="phoneNumber"
               value={formData.phoneNumber}
               onChange={(e) => heandleOnChange(e)}
             />
+            {formData.phoneNumber === "" && focus.phoneNumber && (
+              <div className="error-text">Phone number Required !</div>
+            )}
+            {validation.phoneValid && (
+              <div className="error-text">Invalid Phone number !</div>
+            )}
           </div>
           <div className="input-item">
             <div className="input-label">
@@ -254,13 +453,21 @@ export default function ModalPopUp(props) {
               <label>Required</label>
             </div>
             <textarea
-              className={`input-text width-auto`}
+              className={`${
+                formData.shippingAddress === "" &&
+                focus.shippingAddress &&
+                "input-error"
+              } input-text width-auto`}
+              onBlur={(e) => focusEvent(e)}
               name="shippingAddress"
               cols={4}
               rows={4}
               value={formData.shippingAddress}
               onChange={(e) => heandleOnChange(e)}
             />
+            {formData.shippingAddress === "" && focus.shippingAddress && (
+              <div className="error-text">Shipping address Required !</div>
+            )}
           </div>
         </div>
       </form>
@@ -268,9 +475,42 @@ export default function ModalPopUp(props) {
         <div className="btn-container">
           <button className="btn clear-btn">Clear</button>
           <button
-            className="btn add-btn"
+            className={`${
+              (formData.agentName === "" ||
+                formData.cardNumber === "" ||
+                formData.cardExp === "" ||
+                formData.cardCVV === "" ||
+                formData.customerName === "" ||
+                formData.billingAddress === "" ||
+                formData.city === "" ||
+                formData.state === "" ||
+                formData.zipCode === "" ||
+                formData.phoneNumber === "" ||
+                formData.shippingAddress === "" ||
+                formData.email === "" ||
+                formData.productName === "" ||
+                formData.quantity === "" ||
+                formData.amount === "") &&
+              "disable-btn"
+            } btn add-btn`}
             onClick={() => submitData()}
-            disabled={checkAllFeilds()}
+            disabled={
+              formData.agentName === "" ||
+              formData.cardNumber === "" ||
+              formData.cardExp === "" ||
+              formData.cardCVV === "" ||
+              formData.customerName === "" ||
+              formData.billingAddress === "" ||
+              formData.city === "" ||
+              formData.state === "" ||
+              formData.zipCode === "" ||
+              formData.phoneNumber === "" ||
+              formData.shippingAddress === "" ||
+              formData.email === "" ||
+              formData.productName === "" ||
+              formData.quantity === "" ||
+              formData.amount === ""
+            }
           >
             Add
           </button>
