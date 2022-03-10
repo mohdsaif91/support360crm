@@ -1,17 +1,15 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import React from "react";
+
 import FilterComponent from "./FilterComponent";
+import UserTable from "./UserTable";
 
 export default function Home() {
-  const userData = useSelector((state) => state.login);
-  const navigate = useNavigate();
-  useEffect(() => {
-    // !userData.user && navigate("/login");
-  }, []);
   return (
     <div>
       <FilterComponent />
+      <div className="table-container">
+        <UserTable />
+      </div>
     </div>
   );
 }

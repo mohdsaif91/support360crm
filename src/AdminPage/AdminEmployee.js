@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import AddIcon from "../Images/adminImage/plus.png";
 import ClearIcon from "../Images/close.png";
-import { addEmployeeFun } from "../Redux/Slices/EmployeeSlice";
+import { addEmployeeFun, getEmployees } from "../Redux/Slices/EmployeeSlice";
 
 const initialAddEmployee = {
   userName: "",
@@ -24,7 +24,14 @@ export default function AdminEmployee() {
   const [employee, setEmployee] = useState({ ...initialAddEmployee });
   const [error, setError] = useState({ ...initialAddEmployeeError });
 
+  const employeeData = useSelector((state) => state.employee);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!employeeData.allEmployee) {
+      dispatch(getEmployees());
+    }
+  }, [employeeData]);
 
   const handleChange = (e) => {
     setEmployee({ ...employee, [e.target.name]: e.target.value });
@@ -46,7 +53,10 @@ export default function AdminEmployee() {
     } else {
       dispatch(addEmployeeFun(restProps));
     }
+    setEmployee({ ...initialAddEmployee });
   };
+
+  console.log(employeeData.allEmployee);
 
   return (
     <div className="admin-page-margin">
@@ -118,6 +128,64 @@ export default function AdminEmployee() {
               Add Emplyee
             </button>
           </div>
+        </div>
+        <div className="employee-list">
+          <div className="w3-container">
+            <ul className="w3-ul w3-card-4">
+              {employeeData.allEmployee.map((m) => (
+                <li className="employee-li">
+                  <img
+                    src="https://www.w3schools.com/w3css/img_avatar2.png"
+                    className="emp-image"
+                  />
+                  <div className="emp-name">{m.userName}</div>
+                  <div
+                    onclick="this.parentElement.style.display='none'"
+                    className="emp-delete-icon"
+                  >
+                    <img className="add-btn-icon" src={ClearIcon} />
+                  </div>
+                </li>
+              ))}
+
+              {/* <li className="employee-li">
+                <span
+                  onclick="this.parentElement.style.display='none'"
+                  className="w3-bar-item w3-button w3-white w3-xlarge w3-right"
+                >
+                  ×
+                </span>
+                <img
+                  src="https://www.w3schools.com/w3css/img_avatar5.png"
+                  className="bg w3-bar-item w3-circle w3-hide-small"
+                />
+                <div className="w3-bar-item">
+                  <span className="w3-large">Jill</span>
+                  <br />
+                  <span>Support</span>
+                </div>
+              </li>
+
+              <li className="employee-li">
+                <img
+                  src="https://www.w3schools.com/w3css/img_avatar6.png"
+                  className="bg w3-bar-item w3-circle w3-hide-small"
+                />
+                <div className="w3-bar-item">
+                  <span className="w3-large">Jane</span>
+                  <br />
+                  <span>Accountant</span>
+                </div>
+                <span
+                  onclick="this.parentElement.style.display='none'"
+                  className="w3-bar-item w3-button w3-white w3-xlarge w3-right"
+                >
+                  ×
+                </span>
+              </li> */}
+            </ul>
+          </div>
+          <br />
         </div>
       </div>
     </div>

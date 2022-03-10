@@ -1,10 +1,11 @@
-import React, { useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import CloseIcon from "../Images/close.png";
 import { addCustomer } from "../Redux/Slices/CustomerSlice";
 import {
   cardExpiryValidation,
+  cvvValidation,
   emailValidation,
   phoneValidation,
 } from "../util/util";
@@ -50,6 +51,7 @@ const validationData = {
   phoneValid: false,
   cardNumber: false,
   cardExpiry: false,
+  cardCVV: false,
 };
 
 export default function ModalPopUp(props) {
@@ -58,42 +60,55 @@ export default function ModalPopUp(props) {
   const [focus, setFocus] = useState({ ...initialFormDataFocus });
   const [validation, setValidation] = useState({ ...validationData });
 
+  const loginState = useSelector((state) => state.login);
+
+  useEffect(() => {
+    setFormData({ ...formData, agentName: loginState?.user?.userName });
+  }, []);
+
   const dispatch = useDispatch();
 
   const heandleOnChange = (e) => {
-    if (e.target.name == "email") {
-      console.log(emailValidation(e.target.value));
-      if (!emailValidation(e.target.value)) {
-        setValidation({ ...validation, emailValid: true });
-      } else {
-        setValidation({ ...validation, emailValid: false });
-      }
-    }
-    if (e.target.name == "phoneNumber") {
-      console.log(phoneValidation(e.target.value));
-      if (phoneValidation(e.target.value)) {
-        console.log("valid");
-        setValidation({ ...validation, phoneValid: false });
-      } else {
-        console.log("Invalid");
-        setValidation({ ...validation, phoneValid: true });
-      }
-    }
-    if (e.target.name == "cardNumber") {
-      if (e.target.value.length === 16) {
-        setValidation({ ...validation, cardNumber: false });
-      } else {
-        setValidation({ ...validation, cardNumber: true });
-      }
-    }
-    if (e.target.name == "cardExp") {
-      if (cardExpiryValidation(e.target.value)) {
-        setValidation({ ...validation, cardExpiry: false });
-      } else {
-        setValidation({ ...validation, cardExpiry: true });
-      }
-    }
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    switch (true) {
+      case e.target.name == "email":
+        if (!emailValidation(e.target.value)) {
+          setValidation({ ...validation, emailValid: true });
+        } else {
+          setValidation({ ...validation, emailValid: false });
+        }
+        break;
+      case e.target.name == "phoneNumber":
+        if (phoneValidation(e.target.value)) {
+          setValidation({ ...validation, phoneValid: false });
+        } else {
+          setValidation({ ...validation, phoneValid: true });
+        }
+        break;
+      case e.target.name == "cardNumber":
+        if (e.target.value.length === 16) {
+          setValidation({ ...validation, cardNumber: false });
+        } else {
+          setValidation({ ...validation, cardNumber: true });
+        }
+        break;
+      case e.target.name == "cardExp":
+        if (cardExpiryValidation(e.target.value)) {
+          setValidation({ ...validation, cardExpiry: false });
+        } else {
+          setValidation({ ...validation, cardExpiry: true });
+        }
+        break;
+      case e.target.name == "cardCVV":
+        if (cvvValidation(e.target.value)) {
+          setValidation({ ...validation, cardCVV: false });
+        } else {
+          setValidation({ ...validation, cardCVV: true });
+        }
+        break;
+      default:
+        return "";
+    }
   };
 
   const checkforEmpty = () => {
@@ -123,12 +138,8 @@ export default function ModalPopUp(props) {
   };
 
   const submitData = () => {
-    console.log("called !!");
     if (checkforEmpty()) {
-      console.log("called !!2");
     } else {
-      console.log("Valid And Valid !");
-      console.log(formData);
       dispatch(addCustomer(formData));
     }
   };
@@ -138,8 +149,6 @@ export default function ModalPopUp(props) {
       setFocus({ ...focus, [e.target.name]: true });
     }
   };
-
-  console.log(validation);
 
   return (
     <div className="modal-popup">
@@ -180,6 +189,7 @@ export default function ModalPopUp(props) {
               <label>Required</label>
             </div>
             <input
+              autocomplete="off"
               onBlur={(e) => focusEvent(e)}
               name="cardNumber"
               className={`${
@@ -213,6 +223,9 @@ export default function ModalPopUp(props) {
             />
             {formData.cardCVV === "" && focus.cardCVV && (
               <div className="error-text">Card CVV Required !</div>
+            )}
+            {validation.cardCVV && (
+              <div className="error-text">Invalid Card CVV !</div>
             )}
           </div>
           <div className="input-item">
@@ -435,6 +448,7 @@ export default function ModalPopUp(props) {
                 "input-error"
               } input-text`}
               type="text"
+              autocomplete="off"
               onBlur={(e) => focusEvent(e)}
               name="phoneNumber"
               value={formData.phoneNumber}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { loginFun, signUp } from "../Redux/Slices/LoginSlice";
+import { loginFun } from "../Redux/Slices/LoginSlice";
 
 const initialLogin = {
   userName: "",
@@ -24,7 +24,6 @@ export default function Login() {
   };
 
   useEffect(() => {
-    console.log(loginData);
     if (loginData.loggedIn) {
       if (loginData?.user?.role === "admin") {
         navigate("/adminHome");
@@ -45,7 +44,6 @@ export default function Login() {
             placeholder="User Name"
             onChange={(e) => setLogin({ ...login, userName: e.target.value })}
           />
-          {/* <span>@gmail.com</span> */}
         </div>
         <div className="row">
           <input
@@ -64,6 +62,7 @@ export default function Login() {
           />
         </div>
         <input onClick={() => loginUser()} type="button" value="Login" />
+        <div className="error-text">{loginData.errorMessage}</div>
       </form>
     </div>
   );

@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 
 import AdminHome from "../Images/adminImage/admin-home.png";
 import EmployeeIcon from "../Images/adminImage/employee.png";
+import DataIcon from "../Images/adminImage/data-icon.png";
 
 export default function AdminSideBar() {
   const [active, setActive] = useState("/adminHome");
@@ -32,6 +33,14 @@ export default function AdminSideBar() {
             <img className="menu-icon" src={EmployeeIcon} />
           </div>
           <span>Employee</span>
+        </a>
+      </Link>
+      <Link to="adminData">
+        <a href="/#" className={`${active === "/adminData" && "active-nav"}`}>
+          <div className="menu-container">
+            <img className="menu-icon" src={DataIcon} />
+          </div>
+          <span>Data</span>
         </a>
       </Link>
     </nav>

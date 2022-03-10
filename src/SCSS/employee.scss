@@ -1,16 +1,17 @@
 .add-employee-form {
   display: flex;
-  justify-content: center;
-  align-items: center;
-
+  justify-content: space-around;
   .form {
     margin-top: 56px;
     padding: 32px;
-    border-radius: 10px;
-    border: 1px solid #333;
-    -webkit-box-shadow: 13px 10px 12px -3px rgba(0, 0, 0, 0.7);
-    -moz-box-shadow: 13px 10px 12px -3px rgba(0, 0, 0, 0.7);
-    box-shadow: 13px 10px 12px -3px rgba(0, 0, 0, 0.7);
+    border-radius: 8px;
+    background-color: #d9dce0;
+    -webkit-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+    max-height: 480px;
+    min-height: 480px;
+    // box-shadow: 0 4px 10px 0 rgb(0 0 0 / 20%), 0 4px 20px 0 rgb(0 0 0 / 19%);
     .input-element {
       margin: 24px;
       .input-label {
@@ -20,7 +21,7 @@
         margin: 8px;
         padding: 10px;
         width: 250px;
-        border-radius: 10px;
+        border-radius: 6px;
       }
     }
     .btn-container {
@@ -48,10 +49,65 @@
       }
     }
   }
+  .employee-list {
+    width: 400px;
+    background-color: #d9dce0;
+    border-radius: 8px;
+    margin-top: 64px;
+    -webkit-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+    // box-shadow: 0 4px 10px 0 rgb(0 0 0 / 20%), 0 4px 20px 0 rgb(0 0 0 / 19%);
+    .w3-container {
+      .w3-ul {
+        padding: 16px 32px !important;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        .employee-li {
+          padding: 8px 16px;
+          border-bottom: 1px solid #ddd;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          .emp-image {
+            width: 85px;
+            border-radius: 50%;
+            margin-right: 24px;
+          }
+          .emp-name {
+            padding-right: 24px;
+            font-size: 20px;
+            text-transform: uppercase;
+          }
+          .emp-delete-icon {
+            width: 40px;
+          }
+        }
+      }
+    }
+  }
 }
 
 .add-btn-icon {
   padding-right: 12px;
   height: 24px;
   //   width: 60px;
+}
+
+// -----------listForm
+.bg:hover {
+  animation: pulse 1.2s ease infinite;
+}
+@keyframes pulse {
+  0% {
+    transform: scale(1, 1);
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0.1;
+  }
 }

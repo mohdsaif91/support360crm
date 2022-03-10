@@ -1,26 +1,28 @@
 import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const startLoading = createAsyncThunk("loading/startLoading", () => {
-  return { payload: true };
+  return true;
 });
+
 export const stopLoading = createAsyncThunk("loading/stopLoading", () => {
-  return { payload: false };
+  return false;
 });
 
 const LoadingSlice = createSlice({
   name: "loading",
   initialState: { loadingState: false },
+  reducers: {},
   extraReducers: {
     [startLoading.fulfilled]: (state, action) => {
       return {
         ...state,
-        loadingState: true,
+        loadingState: action.payload,
       };
     },
     [stopLoading.fulfilled]: (state, action) => {
       return {
         ...state,
-        loadingState: false,
+        loadingState: action.payload,
       };
     },
   },

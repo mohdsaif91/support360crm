@@ -1,7 +1,13 @@
+import { onAuthenticate } from "./APICall";
 import http from "./index";
 
 const LoginUser = (data) => {
-  return http.post("/auth/login", data);
+  const apiData = {
+    url: "/auth/login",
+    method: "post",
+    data,
+  };
+  return onAuthenticate({ ...apiData });
 };
 
 const signUpUser = (data) => {
