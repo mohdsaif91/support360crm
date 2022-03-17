@@ -44,6 +44,9 @@ export const loginFun = createAsyncThunk(
         if (res.response.status === 401) {
           return rejectWithValue(res.response.data);
         }
+        if (res.response.status === 404) {
+          return rejectWithValue(res.response.data);
+        }
       })
       .catch((err) => {
         dispatch(stopLoading());
@@ -77,6 +80,18 @@ export const signUp = createAsyncThunk(
 const loginSlice = createSlice({
   name: "login",
   initialState: { ...initialLogin },
+  reducers: {
+    profileUpdate: (state, action) => {
+      const { token, ...restProps } = action.payload;
+      return {
+        ...state,
+        tokenExpire: false,
+        user: restProps,
+        loggedIn: true,
+        loadingState: false,
+      };
+    },
+  },
   extraReducers: {
     [loginFun.fulfilled]: (state, action) => {
       const { token, ...restProps } = action.payload;
@@ -116,5 +131,6 @@ const loginSlice = createSlice({
   },
 });
 
+export const { profileUpdate } = loginSlice.actions;
 const { reducer } = loginSlice;
 export default reducer;

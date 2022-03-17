@@ -122,26 +122,10 @@ export default function Table(props) {
             minWidth: 180,
             width: 180,
           },
-          // {
-          //   Header: "Email",
-          //   accessor: "email",
-          // },
-          // {
-          //   Header: "Phone",
-          //   accessor: "phoneNumber",
-          // },
           { Header: "City", accessor: "city" },
           { Header: "State", accessor: "state" },
 
           { Header: "Zip-Code", accessor: "zipCode" },
-        ],
-      },
-
-      {
-        Header: "Card",
-        columns: [
-          // { Header: "Number", accessor: "cardNumber" },
-          // { Header: "Expiry", accessor: "cardExp" },
         ],
       },
 
@@ -161,29 +145,9 @@ export default function Table(props) {
           { Header: "Amount", accessor: "amount", minWidth: 40, width: 40 },
         ],
       },
-      // {
-      //   Header: "Address",
-      //   columns: [
-      //     {
-      //       Header: "Billing",
-      //       accessor: "billingAddress",
-      //     },
-      //     {
-      //       Header: "Shipping",
-      //       accessor: "shippingAddress",
-      //     },
-      //   ],
-      // },
     ],
     []
   );
-
-  // props?.role?.role === "admin" &&
-  //   columns.splice(1, 0, {
-  //     Header: "Agent",
-  //     width: 120,
-  //     accessor: "agentName",
-  //   });
 
   const {
     getTableProps,

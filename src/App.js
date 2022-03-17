@@ -10,16 +10,18 @@ import LoadingGif from "./Images/loading.gif";
 
 import AdminHome from "./AdminPage/AdminHome";
 import AdminHeader from "./Component/AdminSideBar";
-import AdminEmployee from "./AdminPage/AdminEmployee";
+import AdminEmployeeHome from "./AdminPage/AdminEmployee/AdminEmployeeHome";
 import { setUserData } from "./Redux/Slices/LoginSlice";
 import AdminData from "./AdminPage/AdminData";
 import UnAuthorized from "./util/UnAuthorized";
+import EmployeeProfile from "./Pages/EmployeeProfile";
 
 function App() {
   const [hide, setHide] = useState(true);
 
   const loadingState = useSelector((state) => state.loading);
   const userState = useSelector((state) => state.login);
+
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -28,10 +30,13 @@ function App() {
     let userData = null;
     if (!sessionStorage.getItem("userData")) {
       navigate("/login");
+    } else if (userState.tokenExpire) {
+      navigate("/unAutorized");
     } else {
       userData = JSON.parse(sessionStorage.getItem("userData"));
     }
-    userState.tokenExpire && navigate("/unAutorized");
+    console.log(userState);
+    // userState.tokenExpire && navigate("/unAutorized");
     if (userData && !userState?.user) {
       dispatch(setUserData(userData));
     }
@@ -60,10 +65,11 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/unAutorized" element={<UnAuthorized />} />
+            <Route path="/profile" element={<EmployeeProfile />} />
 
             {/* AdminRoute */}
             <Route path="/adminHome" element={<AdminHome />} />
-            <Route path="/adminEmployee" element={<AdminEmployee />} />
+            <Route path="/adminEmployee" element={<AdminEmployeeHome />} />
             <Route path="/adminData" element={<AdminData />} />
           </Routes>
         </>

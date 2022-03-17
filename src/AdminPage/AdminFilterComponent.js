@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDatePicker from "react-datepicker";
 import Select from "react-select";
 import moment from "moment";
@@ -19,6 +19,8 @@ export default function AdminFilterComponent() {
   const [filter, setFilter] = useState({ ...initialFilter });
 
   const employee = useSelector((state) => state.employee);
+  const adminCustomer = useSelector((state) => state.adminCustomer);
+  console.log(adminCustomer);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -35,6 +37,12 @@ export default function AdminFilterComponent() {
   const employeeData =
     employee.allEmployee &&
     employee.allEmployee.map((m) => {
+      return { value: m.userName, label: m.userName };
+    });
+  const customerData =
+    employee.allEmployee &&
+    employee.allEmployee.map((m) => {
+      console.log(m);
       return { value: m.userName, label: m.userName };
     });
 
@@ -84,6 +92,24 @@ export default function AdminFilterComponent() {
       </div>
       <div className="date-container">
         <label>Employee Name</label>
+        <Select
+          value={filter.agentName}
+          className="employee-select-component"
+          onChange={(date) => handleInputChange(date, "agentName")}
+          options={employeeData}
+        />
+      </div>
+      <div className="date-container">
+        <label>Customer contact Number</label>
+        <Select
+          value={filter.agentName}
+          className="employee-select-component"
+          onChange={(date) => handleInputChange(date, "agentName")}
+          options={employeeData}
+        />
+      </div>
+      <div className="date-container">
+        <label>Customer Number</label>
         <Select
           value={filter.agentName}
           className="employee-select-component"

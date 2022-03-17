@@ -33,9 +33,30 @@ const getEmployees = (data, user) => {
   return onAuthenticate({ ...apiData });
 };
 
+const UpdateProfile = (data) => {
+  const apiData = {
+    url: `/employee/update`,
+    method: "put",
+    data,
+  };
+  console.log(apiData);
+  return onAuthenticate({ ...apiData });
+};
+
+const removeEmployee = (id) => {
+  const apiData = {
+    url: "/employee/remove",
+    method: "delete",
+    data: id,
+  };
+  return onAuthenticate({ ...apiData });
+};
+
 export const EmployeeService = {
   addEmployeeAPI,
   getAddedCustomerAPI,
   getDataAPI,
   getEmployees,
+  removeEmployee,
+  UpdateProfile,
 };

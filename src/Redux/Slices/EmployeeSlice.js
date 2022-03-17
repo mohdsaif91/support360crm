@@ -1,20 +1,48 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
 import { EmployeeService } from "../../api/EmployeeService";
 import { startLoading, stopLoading } from "./LoadingSlice";
 import { tokenExpired } from "./LoginSlice";
+import { profileUpdate } from "./LoginSlice";
 
 export const getAddedCustomer = createAsyncThunk(
   "employee/getAddedCustomer",
-  async (data, { rejectWithValue, dispatch }) => {
+  async (data, { fulfillWithValue, rejectWithValue, dispatch }) => {
     try {
       const res = await EmployeeService.getAddedCustomerAPI(data);
-      return res.data;
+      if (res.status === 200) {
+        return fulfillWithValue(res.data);
+      } else if (res.response.status === 409) {
+        return rejectWithValue(res.response.data);
+      } else if (res.response.status === 401) {
+        dispatch(tokenExpired());
+      }
     } catch (error) {
       if (error.response.status === 401) {
         dispatch(tokenExpired());
       } else {
         return rejectWithValue(error.payload.message);
       }
+    }
+  }
+);
+
+export const updateProfilefun = createAsyncThunk(
+  "employee/updateProfile",
+  async (data, { fulfillWithValue, rejectWithValue, dispatch }) => {
+    dispatch(startLoading());
+    try {
+      const res = await EmployeeService.UpdateProfile(data);
+      dispatch(stopLoading());
+      if (res.status === 200) {
+        dispatch(profileUpdate(res.data));
+        return fulfillWithValue(res.data);
+      } else if (res.response.status === 401) {
+        dispatch(tokenExpired());
+      }
+    } catch (err) {
+      dispatch(stopLoading());
+      return rejectWithValue(err);
     }
   }
 );
@@ -69,13 +97,44 @@ export const getCountFunc = createAsyncThunk(
 
 export const addEmployeeFun = createAsyncThunk(
   "employee/addEmployeeFun",
-  async (data, { rejectWithValue, dispatch }) => {
+  async (data, { fulfillWithValue, rejectWithValue, dispatch }) => {
     dispatch(startLoading());
     try {
       const res = await EmployeeService.addEmployeeAPI(data);
-      return res.data;
+      if (res.status === 201) {
+        console.log("jack !!");
+        return fulfillWithValue(res.data);
+      } else if (res.response.status === 409) {
+        return rejectWithValue(res.response.data);
+      } else {
+        console.log("last Condition !");
+      }
     } catch (error) {
+      dispatch(stopLoading());
       return rejectWithValue(error.response.statusText);
+    } finally {
+      dispatch(stopLoading());
+    }
+  }
+);
+
+export const removeEmployeeFun = createAsyncThunk(
+  "employee/removeEmployeefun",
+  async (data, { dispatch, fulfillWithValue, rejectWithValue }) => {
+    dispatch(startLoading());
+    try {
+      const res = await EmployeeService.removeEmployee(data);
+      if (res.response) {
+        dispatch(stopLoading());
+        if (res.response.status === 401) {
+          dispatch(tokenExpired());
+        }
+      } else {
+        return fulfillWithValue(res.data);
+      }
+    } catch (error) {
+      dispatch(stopLoading());
+      return rejectWithValue(error);
     } finally {
       dispatch(stopLoading());
     }
@@ -122,6 +181,49 @@ const employeeSlice = createSlice({
         ...state,
         error: true,
         errorMessage: action.payload,
+      };
+    },
+    [addEmployeeFun.fulfilled]: (state, action) => {
+      console.log(action.payload, " ADD EMP");
+      return {
+        ...state,
+        allEmployee: [...state.allEmployee, action.payload.data],
+      };
+    },
+    [addEmployeeFun.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: true,
+        errorMessage: action.payload,
+      };
+    },
+    [removeEmployeeFun.fulfilled]: (state, action) => {
+      return {
+        ...state,
+        allEmployee: state.allEmployee.filter((f) => f._id !== action.payload),
+        error: false,
+      };
+    },
+    [removeEmployeeFun.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: true,
+      };
+    },
+    [updateProfilefun.fulfilled]: (state, action) => {
+      console.log(action.payload, "MAIN");
+      sessionStorage.removeItem("userData");
+      sessionStorage.setItem("userData", JSON.stringify(action.payload));
+      return {
+        ...state,
+        error: false,
+        allEmployee: state.allEmployee.map((m) => {
+          if (m._id === action.payload._id) {
+            return action.payload;
+          } else {
+            return m;
+          }
+        }),
       };
     },
   },

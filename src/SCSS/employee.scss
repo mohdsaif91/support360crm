@@ -1,8 +1,9 @@
 .add-employee-form {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  align-items: center;
   .form {
-    margin-top: 56px;
+    margin-top: 16px;
     padding: 32px;
     border-radius: 8px;
     background-color: #d9dce0;
@@ -13,9 +14,9 @@
     min-height: 480px;
     // box-shadow: 0 4px 10px 0 rgb(0 0 0 / 20%), 0 4px 20px 0 rgb(0 0 0 / 19%);
     .input-element {
-      margin: 24px;
+      margin: 16px;
       .input-label {
-        font-size: 24px;
+        font-size: 14px;
       }
       .form-input {
         margin: 8px;

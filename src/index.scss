@@ -15,6 +15,7 @@ body {
 
 .auth-container {
   margin-top: 64px;
+  padding-top: 32px;
 }
 
 .text-wrapper {
@@ -69,18 +70,26 @@ body {
 @import "./SCSS/modalPopup";
 @import "./SCSS/Login";
 @import "./SCSS/table";
-
+@import "./SCSS/employeeProfile";
 @import "./SCSS/sideBar";
 @import "./SCSS/employee";
+@import "./SCSS/modal";
 
 //Admin
 @import "./SCSS/Admin/adminHome";
 @import "./SCSS/Admin/adminTable";
+@import "./SCSS/Admin/adminEmployee";
 
 .icon {
   height: 40px;
   width: 40px;
   cursor: pointer;
+}
+
+.no-data-loader {
+  height: 96px;
+  width: 96px;
+  border-radius: 46%;
 }
 
 .btn {
@@ -98,7 +107,7 @@ body {
 }
 
 .logo-icon {
-  height: 70px;
+  height: 60px;
   width: 60px;
   cursor: pointer;
 }
@@ -108,6 +117,14 @@ body {
   text-align: center;
   color: red;
   font-size: 16px;
+}
+
+.btn-disable {
+  cursor: not-allowed;
+}
+
+.no-center {
+  text-align: left !important;
 }
 
 .center-message {
@@ -145,8 +162,8 @@ body {
 }
 
 .admin-page-margin {
-  margin-left: 84px;
-  margin-top: 64px;
+  margin-left: 96px;
+  margin-top: 104px;
 }
 
 .pt-32 {

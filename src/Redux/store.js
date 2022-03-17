@@ -5,6 +5,7 @@ import loginSlice from "./Slices/LoginSlice";
 import loadingSlice from "./Slices/LoadingSlice";
 import employeeSlice from "./Slices/EmployeeSlice";
 import adminCustomer from "./Slices/Admin/AdminCustomerSlice";
+import UtilReducer from "./Slices/utilSlice";
 
 const reducer = {
   customer: customerSlice,
@@ -12,6 +13,7 @@ const reducer = {
   loading: loadingSlice,
   employee: employeeSlice,
   adminCustomer,
+  UtilReducer: UtilReducer,
 };
 
 const store = configureStore({

@@ -22,9 +22,14 @@ function AvatarDropdown() {
     navigate("/login");
   };
 
+  const goToProfile = () => {
+    setVisible(false);
+    navigate("profile");
+  };
+
   return (
     <div className={`user-menu-wrap ${visible && "top-10"}`}>
-      <div class="mini-photo-wrapper" href="#">
+      <div className="mini-photo-wrapper" href="#">
         <img
           className="icon progfile-dropdown"
           onClick={() => setVisible(!visible)}
@@ -35,15 +40,15 @@ function AvatarDropdown() {
         <div className="menu-container">
           <ul className="user-menu">
             <div className="profile-highlight">
-              <img
+              {/* <img
                 src="https://images.unsplash.com/photo-1578976563986-fb8769ab695e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80"
                 alt="profile-img"
-              />
+              /> */}
               <div className="details">
                 <div id="profile-name">{loginState?.user?.userName}</div>
               </div>
             </div>
-            <li class="user-menu__item">
+            <li className="user-menu__item" onClick={() => goToProfile()}>
               <a className="user-menu-link" href="#">
                 <img
                   className="user-menu-icon"
@@ -53,41 +58,16 @@ function AvatarDropdown() {
                 <div>Profile</div>
               </a>
             </li>
-            {/* <li class="user-menu__item">
-              <a class="user-menu-link" href="#">
-                <img
-                  className="user-menu-icon"
-                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1604623/team.png"
-                  alt="team_icon"
-                />
-                <div>Team</div>
-              </a>
-            </li>
-            <li class="user-menu__item">
-              <a class="user-menu-link" href="#">
-                <img
-                  className="user-menu-icon"
-                  src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1604623/book.png"
-                  alt="team_icon"
-                />
-                <div>Log History</div>
-              </a>
-            </li> */}
             <div className="footer">
-              <li class="user-menu__item">
+              <li className="user-menu__item">
                 <a
-                  class="user-menu-link logout-link"
+                  className="user-menu-link logout-link"
                   href="#"
                   onClick={() => logOutUser()}
                 >
                   Logout
                 </a>
               </li>
-              {/* <li class="user-menu__item">
-                <a class="user-menu-link" href="#">
-                  Settings
-                </a>
-              </li> */}
             </div>
           </ul>
         </div>

@@ -1,0 +1,53 @@
+.employee-profile-container {
+  margin: 80px 24px;
+  .navigate-container {
+    padding: 32px;
+    .navigate-label {
+      cursor: pointer;
+      font-size: 24px;
+      padding-right: 4px;
+      font-weight: 600;
+    }
+    .nav-active {
+      color: $header-Color;
+    }
+  }
+  .profile-form {
+    padding: 32px 64px;
+    .form-control {
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 32px;
+      .label-component {
+        font-size: 20px;
+        padding: 0 0 8px 4px;
+      }
+      .input-element {
+        width: 20%;
+        height: 30px;
+        padding: 8px;
+        border-radius: 6px;
+      }
+      .radio-container {
+        display: flex;
+        align-items: center;
+        .radio-btn-element {
+          padding-right: 16px;
+        }
+        .radio-ele {
+          padding-right: 16px;
+          label {
+            padding-left: 4px;
+          }
+        }
+      }
+    }
+    .btn-container {
+      .profile-update-btn {
+        background-color: green;
+        border-radius: 8px;
+        color: #ffffff;
+      }
+    }
+  }
+}

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import ModalPopUp from "../Component/ModalPopUp";
 import { getCountFunc, getAddedCustomer } from "../Redux/Slices/EmployeeSlice";
+import LoadingGif from "../Images/loading.gif";
 
 export default function FilterComponent() {
   const [show, setShow] = useState(false);
@@ -16,6 +17,8 @@ export default function FilterComponent() {
       dispatch(getAddedCustomer(loginState?.user?.userName));
     }
   }, [loginState?.user]);
+
+  console.log(customerState);
 
   return (
     <div className="filter">
@@ -35,15 +38,31 @@ export default function FilterComponent() {
         <div className="card total-container">
           <div className="card-heading">Total Entries</div>
           <div className="card-count total">
-            {customerState?.employeeAddedcust?.data?.total}
+            {customerState?.employeeAddedcust?.data?.total ? (
+              customerState.employeeAddedcust.data.total
+            ) : (
+              <img
+                src={LoadingGif}
+                alt="Loading..."
+                className="no-data-loader"
+              />
+            )}
           </div>
         </div>
         <div className="card day-container">
           <div className="card-heading">Daily Entries</div>
           <div className="card-count">
-            {customerState?.employeeAddedcust?.data?.daily === 0
-              ? "- -"
-              : customerState?.employeeAddedcust?.data?.daily}
+            {customerState?.employeeAddedcust?.data?.daily ? (
+              customerState?.employeeAddedcust?.data?.daily
+            ) : customerState?.employeeAddedcust?.data?.daily === 0 ? (
+              "--"
+            ) : (
+              <img
+                src={LoadingGif}
+                alt="Loading..."
+                className="no-data-loader"
+              />
+            )}
           </div>
           <button
             className="btn btn-daily"
@@ -59,9 +78,17 @@ export default function FilterComponent() {
         <div className="card month-container">
           <div className="card-heading">Monthly Entries</div>
           <div className="card-count">
-            {customerState?.employeeAddedcust?.data?.monthly === 0
-              ? "- -"
-              : customerState?.employeeAddedcust?.data?.monthly}
+            {customerState?.employeeAddedcust?.data?.monthly ? (
+              customerState?.employeeAddedcust?.data?.monthly
+            ) : customerState?.employeeAddedcust?.data?.monthly === 0 ? (
+              "--"
+            ) : (
+              <img
+                src={LoadingGif}
+                alt="Loading..."
+                className="no-data-loader"
+              />
+            )}
           </div>
           <button
             className="btn btn-monthly"
@@ -80,9 +107,17 @@ export default function FilterComponent() {
         <div className="card year-container">
           <div className="card-heading">Yearly Entries</div>
           <div className="card-count">
-            {customerState?.employeeAddedcust?.data?.yearly === 0
-              ? "- -"
-              : customerState?.employeeAddedcust?.data?.yearly}
+            {customerState?.employeeAddedcust?.data?.yearly ? (
+              customerState?.employeeAddedcust?.data?.yearly
+            ) : customerState?.employeeAddedcust?.data?.yearly === 0 ? (
+              "--"
+            ) : (
+              <img
+                src={LoadingGif}
+                alt="Loading..."
+                className="no-data-loader"
+              />
+            )}
           </div>
           <button
             className="btn btn-yearly"

@@ -11,16 +11,16 @@ export default function UnAuthorized() {
   };
 
   return (
-    <div class="auth-container text-wrapper">
-      <div class="title" data-content="404">
+    <div className="auth-container text-wrapper">
+      <div className="title" data-content="404">
         401 - ACCESS DENIED
       </div>
 
-      <div class="subtitle">
-        Oops, Your Token has expired Please login-again.
+      <div className="subtitle">
+        Oops, Your Session has expired Please login-again.
       </div>
-      <div class="auth-buttons">
-        <button class="auth-button" onClick={() => logInAgain()}>
+      <div className="auth-buttons">
+        <button className="auth-button" onClick={() => logInAgain()}>
           Login Again !
         </button>
       </div>

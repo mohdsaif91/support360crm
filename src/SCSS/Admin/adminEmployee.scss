@@ -1,0 +1,36 @@
+.admin-employee-tabs {
+  .admin-employee-tab-list {
+    display: flex;
+    background-color: #a19e9e;
+    // justify-content: center;
+    margin-bottom: 32px;
+    align-items: center;
+    margin-right: 8px;
+    border-radius: 6px;
+    padding-left: 2px;
+
+    .tab-btn {
+      cursor: pointer;
+      height: 100%;
+      padding: 16px 32px;
+      border: none;
+      font-size: 20px;
+      background-color: #a19e9e;
+    }
+    .tab-active {
+      border-radius: 6px;
+      color: #ffffff;
+      background-color: $header-Color;
+    }
+  }
+}
+
+.employee-directory-container {
+  margin: 16px;
+  .employee-filter {
+    padding: 8 32px;
+    .employee-select {
+      width: 30%;
+    }
+  }
+}
