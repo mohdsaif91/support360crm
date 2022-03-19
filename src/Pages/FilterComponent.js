@@ -16,9 +16,7 @@ export default function FilterComponent() {
     if (loginState?.user?.userName) {
       dispatch(getAddedCustomer(loginState?.user?.userName));
     }
-  }, [loginState?.user]);
-
-  console.log(customerState);
+  }, [loginState?.user, dispatch]);
 
   return (
     <div className="filter">
@@ -40,6 +38,8 @@ export default function FilterComponent() {
           <div className="card-count total">
             {customerState?.employeeAddedcust?.data?.total ? (
               customerState.employeeAddedcust.data.total
+            ) : customerState?.employeeAddedcust?.data?.daily === 0 ? (
+              "--"
             ) : (
               <img
                 src={LoadingGif}

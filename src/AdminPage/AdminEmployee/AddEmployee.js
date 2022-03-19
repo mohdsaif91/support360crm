@@ -29,8 +29,6 @@ export default function AddEmployee() {
   const employeeData = useSelector((state) => state.employee);
   const dispatch = useDispatch();
 
-  console.log(employeeData, " ADD EMP");
-
   useEffect(() => {
     if (!employeeData.allEmployee) {
       dispatch(getEmployees());

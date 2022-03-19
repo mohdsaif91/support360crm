@@ -21,7 +21,6 @@ function AdminEmployeeHome() {
     if (!employeeData.allEmployee) {
       dispatch(getEmployees());
     }
-    console.log("data CHANGED ??");
   }, [employeeData]);
 
   const options = employeeData.allEmployee
@@ -45,12 +44,6 @@ function AdminEmployeeHome() {
             onClick={() => dispatch(setTabIndexAction(1))}
           >
             Add Employee
-          </button>
-          <button
-            className={`tab-btn ${tabIndex == 2 && "tab-active"}`}
-            onClick={() => dispatch(setTabIndexAction(2))}
-          >
-            Update Employee password
           </button>
         </div>
         <div className="tab-panel">

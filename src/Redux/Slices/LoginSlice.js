@@ -50,18 +50,7 @@ export const loginFun = createAsyncThunk(
       })
       .catch((err) => {
         dispatch(stopLoading());
-        console.log(err.response);
       });
-    // } catch (error) {
-    //   if (error.response.status === 401) {
-    //     dispatch(tokenExpired());
-    //     console.log("token issue");
-    //   } else {
-    //     return rejectWithValue(error.response.data);
-    //   }
-    // } finally {
-    //   dispatch(stopLoading());
-    // }
   }
 );
 
@@ -74,6 +63,27 @@ export const signUp = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.statusText);
     }
+  }
+);
+
+export const updatePasswordFun = createAsyncThunk(
+  "employee/updatePasswordFun",
+  async (data, { dispatch, fulfillWithValue, rejectWithValue }) => {
+    dispatch(startLoading());
+    console.log(data);
+    return await LoginService.UpdatePassword(data)
+      .then((res) => {
+        dispatch(stopLoading());
+        if (res.status === 200) {
+          return fulfillWithValue(res.data);
+        } else if (res.status === 401) {
+          return rejectWithValue(res.response.data);
+        }
+      })
+      .catch((err) => {
+        dispatch(stopLoading());
+        return rejectWithValue(err.response.data);
+      });
   }
 );
 
@@ -97,6 +107,7 @@ const loginSlice = createSlice({
       const { token, ...restProps } = action.payload;
       return {
         ...state,
+        error: false,
         tokenExpire: false,
         user: restProps,
         loggedIn: true,
@@ -106,6 +117,7 @@ const loginSlice = createSlice({
     [loginFun.rejected]: (state, action) => {
       return {
         ...state,
+        error: true,
         loggedIn: false,
         loadingState: false.valueOf,
         errorMessage: action.payload,

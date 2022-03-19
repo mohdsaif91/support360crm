@@ -17,8 +17,18 @@ function ModalComponent(props) {
             Are you sure you want to remove this employee ?
           </div>
           <div className="btn-container">
-            <button>Cancle</button>
-            <button>remove</button>
+            <button
+              className="btn cancle-modal-btn"
+              onClick={() => props.onCloseModal()}
+            >
+              Cancle
+            </button>
+            <button
+              className="btn remove-modal-btn"
+              onClick={() => props.removeEmployee()}
+            >
+              remove
+            </button>
           </div>
         </div>
       </Modal>

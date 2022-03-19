@@ -20,7 +20,7 @@ export default function AdminFilterComponent() {
 
   const employee = useSelector((state) => state.employee);
   const adminCustomer = useSelector((state) => state.adminCustomer);
-  console.log(adminCustomer);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -42,7 +42,6 @@ export default function AdminFilterComponent() {
   const customerData =
     employee.allEmployee &&
     employee.allEmployee.map((m) => {
-      console.log(m);
       return { value: m.userName, label: m.userName };
     });
 

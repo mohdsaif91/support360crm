@@ -42,12 +42,10 @@ function EmployeeProfile() {
   const dispatch = useDispatch();
 
   const handleInputChange = (date) => {
-    console.log(date);
     setUser({ ...user, dateOfBirth: date });
   };
 
   const updateProfile = () => {
-    console.log(user);
     dispatch(updateProfilefun(user));
   };
 
@@ -57,7 +55,6 @@ function EmployeeProfile() {
     } else {
       setValidate({ ...validation, mobileError: true, error: true });
     }
-    console.log(e.target.value);
     setUser({ ...user, mobileNumber: e.target.value });
   };
 

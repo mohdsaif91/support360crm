@@ -39,7 +39,6 @@ const UpdateProfile = (data) => {
     method: "put",
     data,
   };
-  console.log(apiData);
   return onAuthenticate({ ...apiData });
 };
 

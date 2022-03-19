@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useTable, useExpanded } from "react-table";
 import Select from "react-select";
 import moment from "moment";
@@ -6,11 +6,18 @@ import { useDispatch } from "react-redux";
 
 import { removeEmployeeFun } from "../../Redux/Slices/EmployeeSlice";
 import ModalComponent from "../../Component/ModalComponent";
+import PasswordUpdate from "../../Component/PasswordUpdate";
+
+const initialUpdate = {
+  data: {},
+  flag: false,
+};
 
 function EmployeeDirectory({ employeeList, employeeData }) {
   const [empData, setEmpData] = useState([]);
   const [selectValue, setSelectValue] = useState({ value: "", label: "" });
-  const [modalIsOpen, setIsOpen] = useState(false);
+  const [modalIsOpen, setIsOpen] = useState({ flag: false, id: "" });
+  const [updateModal, setUpdateModal] = useState({ ...initialUpdate });
 
   const dispatch = useDispatch();
   const selectRef = useRef();
@@ -19,11 +26,10 @@ function EmployeeDirectory({ employeeList, employeeData }) {
     if ([...empData] !== [...employeeData]) {
       setEmpData([...employeeData]);
     }
-  }, [...employeeData]);
+  }, [employeeData]);
 
   useEffect(() => {
-    console.log(selectValue, "<>? ");
-    if (!selectValue) {
+    if (!selectValue || selectValue.value === "") {
       setEmpData([...employeeData]);
     } else {
       setEmpData([
@@ -33,29 +39,54 @@ function EmployeeDirectory({ employeeList, employeeData }) {
   }, [selectValue]);
 
   const removeEmployee = (id) => {
-    console.log(id);
-    setIsOpen(true);
-    // dispatch(removeEmployeeFun({ id }));
+    setIsOpen({ ...modalIsOpen, flag: true, id });
+  };
+
+  const updateEmpPassword = (id, index) => {
+    setUpdateModal({
+      ...updateModal,
+      data: employeeData[index],
+      flag: true,
+    });
+  };
+
+  const confirmRemoveEmployee = () => {
+    dispatch(removeEmployeeFun({ id: modalIsOpen.id }));
+    setIsOpen({ flag: false, id: "" });
+  };
+
+  const selectEmp = (v) => {
+    setSelectValue(v);
+  };
+
+  const onCloseModal = () => {
+    setIsOpen({ ...modalIsOpen, flag: false, id: "" });
   };
 
   const columns = React.useMemo(
     () => [
-      { Header: "Employee Name", accessor: "userName" },
-      { Header: "Gender", accessor: "gender" },
       {
-        Header: "Joined Date",
-        accessor: ({ dateOfJoining }) =>
-          moment(dateOfJoining).format("YYYY-MM-DD"),
+        Header: "Employee",
+        columns: [
+          { Header: "Name", accessor: "userName" },
+          { Header: "Gender", accessor: "gender" },
+          {
+            Header: "Joined Date",
+            accessor: ({ dateOfJoining }) =>
+              moment(dateOfJoining).format("YYYY-MM-DD"),
+          },
+          { Header: "Mobile Number", accessor: "mobileNumber" },
+          {
+            Header: "Age",
+            accessor: ({ dateOfBirth }) => (
+              <div>
+                {dateOfBirth ? moment(dateOfBirth).format("YYYY-MM-DD") : "NA"}
+              </div>
+            ),
+          },
+        ],
       },
-      { Header: "Mobile Number", accessor: "mobileNumber" },
-      {
-        Header: "Age",
-        accessor: ({ dateOfBirth }) => (
-          <div>
-            {dateOfBirth ? moment(dateOfBirth).format("YYYY-MM-DD") : "NA"}
-          </div>
-        ),
-      },
+
       {
         Header: "Action",
         columns: [
@@ -72,10 +103,10 @@ function EmployeeDirectory({ employeeList, employeeData }) {
           },
           {
             Header: "Update password",
-            accessor: ({ _id }) => (
+            accessor: ({ _id }, index) => (
               <button
                 className="btn update-emp-btn"
-                onClick={() => removeEmployee(_id)}
+                onClick={() => updateEmpPassword(_id, index)}
               >
                 Update Password
               </button>
@@ -86,11 +117,6 @@ function EmployeeDirectory({ employeeList, employeeData }) {
     ],
     []
   );
-
-  const selectEmp = (v) => {
-    console.log(v, " value ");
-    setSelectValue(v);
-  };
 
   const {
     getTableProps,
@@ -107,14 +133,6 @@ function EmployeeDirectory({ employeeList, employeeData }) {
     useExpanded
   );
 
-  const openModal = () => {
-    setIsOpen(true);
-  };
-
-  const onCloseModal = () => {
-    setIsOpen(false);
-  };
-
   return (
     <div className="employee-directory-container">
       <div className="employee-filter">
@@ -127,11 +145,20 @@ function EmployeeDirectory({ employeeList, employeeData }) {
           onChange={(v) => selectEmp(v)}
         />
       </div>
-      <ModalComponent
-        onCloseModal={() => onCloseModal()}
-        openModal={() => openModal()}
-        flag={modalIsOpen}
-      />
+      {modalIsOpen.flag && (
+        <ModalComponent
+          onCloseModal={() => onCloseModal()}
+          flag={modalIsOpen.flag}
+          removeEmployee={() => confirmRemoveEmployee()}
+        />
+      )}
+      {updateModal.flag && (
+        <PasswordUpdate
+          closeUpdateModal={() => setUpdateModal({ ...initialUpdate })}
+          data={updateModal.data}
+        />
+      )}
+
       <div className="table-container">
         <table {...getTableProps()}>
           <thead>

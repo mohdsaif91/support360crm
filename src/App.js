@@ -35,8 +35,6 @@ function App() {
     } else {
       userData = JSON.parse(sessionStorage.getItem("userData"));
     }
-    console.log(userState);
-    // userState.tokenExpire && navigate("/unAutorized");
     if (userData && !userState?.user) {
       dispatch(setUserData(userData));
     }

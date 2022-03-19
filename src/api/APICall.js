@@ -1,7 +1,7 @@
 import Axios from "axios";
 
-// const url = "http://localhost:5000/api/v1";
-const url = "https://support360crm.herokuapp.com/api/v1";
+const url = "http://localhost:5000/api/v1";
+// const url = "https://support360crm.herokuapp.com/api/v1";
 
 export const onAuthenticate = async (payload) => {
   const axios = Axios.create({

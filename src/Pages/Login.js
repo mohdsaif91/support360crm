@@ -31,7 +31,7 @@ export default function Login() {
         navigate("/");
       }
     }
-  }, [loginData]);
+  }, [loginData, navigate]);
 
   return (
     <div className="login-container">
@@ -54,6 +54,7 @@ export default function Login() {
           <img
             className="password-icon"
             onClick={() => setShowPassword(!showPassword)}
+            alt=""
             src={`${
               showPassword
                 ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8SA14-A-zoRaiJ2GdUiESsisaFiHNYrUZtjtjZqnth0D_KdfkwzQWIdCjbzhAoYKPTvs&usqp=CAU"
@@ -62,7 +63,9 @@ export default function Login() {
           />
         </div>
         <input onClick={() => loginUser()} type="button" value="Login" />
-        <div className="error-text">{loginData.errorMessage}</div>
+        {loginData.error && (
+          <div className="error-text">{loginData.errorMessage}</div>
+        )}
       </form>
     </div>
   );

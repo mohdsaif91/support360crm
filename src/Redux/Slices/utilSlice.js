@@ -12,7 +12,6 @@ const UtilSlice = createSlice({
   initialState: { tabIndexValue: 0 },
   reducers: {
     setTabIndexAction: (state, action) => {
-      console.log("looki ", action.payload);
       return {
         ...state,
         tabIndexValue: action.payload,

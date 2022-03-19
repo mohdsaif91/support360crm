@@ -102,12 +102,10 @@ export const addEmployeeFun = createAsyncThunk(
     try {
       const res = await EmployeeService.addEmployeeAPI(data);
       if (res.status === 201) {
-        console.log("jack !!");
         return fulfillWithValue(res.data);
       } else if (res.response.status === 409) {
         return rejectWithValue(res.response.data);
       } else {
-        console.log("last Condition !");
       }
     } catch (error) {
       dispatch(stopLoading());
@@ -144,6 +142,14 @@ export const removeEmployeeFun = createAsyncThunk(
 const employeeSlice = createSlice({
   name: "employee",
   initialState: { error: false, errorMessage: "" },
+  reducers: {
+    clearEmployeeData: (state, action) => {
+      return {
+        ...state,
+        employeeTableData: null,
+      };
+    },
+  },
   extraReducers: {
     [getAddedCustomer.fulfilled]: (state, action) => {
       return {
@@ -184,7 +190,6 @@ const employeeSlice = createSlice({
       };
     },
     [addEmployeeFun.fulfilled]: (state, action) => {
-      console.log(action.payload, " ADD EMP");
       return {
         ...state,
         allEmployee: [...state.allEmployee, action.payload.data],
@@ -211,7 +216,6 @@ const employeeSlice = createSlice({
       };
     },
     [updateProfilefun.fulfilled]: (state, action) => {
-      console.log(action.payload, "MAIN");
       sessionStorage.removeItem("userData");
       sessionStorage.setItem("userData", JSON.stringify(action.payload));
       return {
@@ -229,5 +233,6 @@ const employeeSlice = createSlice({
   },
 });
 
+export const { clearEmployeeData } = employeeSlice.actions;
 const { reducer } = employeeSlice;
 export default reducer;
