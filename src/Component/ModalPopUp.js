@@ -13,6 +13,7 @@ import {
 const initialFormData = {
   agentName: "",
   cardNumber: "",
+  createdAt: new Date(),
   cardExp: "",
   cardCVV: "",
   customerName: "",
