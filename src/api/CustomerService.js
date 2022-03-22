@@ -10,7 +10,13 @@ const getCustomer = () => {
 };
 
 const addCustomer = (data) => {
-  return http.post("/customer", data);
+  const apiData = {
+    url: "/customer",
+    method: "post",
+    data,
+  };
+  return onAuthenticate({ ...apiData });
+  // return http.post("/customer", data);
 };
 
 const getAdminCustomer = (data) => {
