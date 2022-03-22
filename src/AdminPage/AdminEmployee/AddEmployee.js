@@ -60,7 +60,7 @@ export default function AddEmployee() {
 
   return (
     <div className="add-employee-form">
-      <div className="form">
+      <form autoComplete="off" className="form">
         <div className="input-element">
           <div className="input-label">User name</div>
           <input
@@ -131,7 +131,7 @@ export default function AddEmployee() {
             Add Emplyee
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 }

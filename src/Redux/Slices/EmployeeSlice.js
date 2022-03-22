@@ -56,7 +56,7 @@ export const getEmployees = createAsyncThunk(
         .then((res) => {
           dispatch(stopLoading());
           if (res.status === 200) {
-            return res.data.allEmployee;
+            return res.data;
           }
           if (res.response.status === 401) {
             dispatch(tokenExpired());
@@ -178,7 +178,10 @@ const employeeSlice = createSlice({
     [getEmployees.fulfilled]: (state, action) => {
       return {
         ...state,
-        allEmployee: action.payload.filter((f) => f.role !== "admin"),
+        customerName: action.payload.customerName,
+        allEmployee: action.payload.allEmployee.filter(
+          (f) => f.role !== "admin"
+        ),
         error: false,
       };
     },

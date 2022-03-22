@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 
@@ -17,8 +17,6 @@ import UnAuthorized from "./util/UnAuthorized";
 import EmployeeProfile from "./Pages/EmployeeProfile";
 
 function App() {
-  const [hide, setHide] = useState(true);
-
   const loadingState = useSelector((state) => state.loading);
   const userState = useSelector((state) => state.login);
 
@@ -45,9 +43,22 @@ function App() {
     }
   }, [userState]);
 
-  useLayoutEffect(() => {
-    setHide(location.pathname !== "/login");
-  }, [location.pathname]);
+  const routesHtml = useMemo(() => {
+    console.log("useMEMO <");
+    return (
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/unAutorized" element={<UnAuthorized />} />
+        <Route path="/profile" element={<EmployeeProfile />} />
+
+        {/* AdminRoute */}
+        <Route path="/adminHome" element={<AdminHome />} />
+        <Route path="/adminEmployee" element={<AdminEmployeeHome />} />
+        <Route path="/adminData" element={<AdminData />} />
+      </Routes>
+    );
+  }, []);
 
   return (
     <div className="App">
@@ -57,19 +68,20 @@ function App() {
         </div>
       ) : (
         <>
-          {hide && <Header />}
+          {location.pathname !== "/login" && <Header />}
           {location.pathname.includes("admin") && <AdminHeader />}
-          <Routes>
+          {routesHtml}
+          {/* <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/unAutorized" element={<UnAuthorized />} />
             <Route path="/profile" element={<EmployeeProfile />} />
 
             {/* AdminRoute */}
-            <Route path="/adminHome" element={<AdminHome />} />
+          {/* <Route path="/adminHome" element={<AdminHome />} />
             <Route path="/adminEmployee" element={<AdminEmployeeHome />} />
             <Route path="/adminData" element={<AdminData />} />
-          </Routes>
+          </Routes> */}
         </>
       )}
     </div>
