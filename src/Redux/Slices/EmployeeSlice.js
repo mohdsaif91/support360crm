@@ -182,6 +182,7 @@ const employeeSlice = createSlice({
         allEmployee: action.payload.allEmployee.filter(
           (f) => f.role !== "admin"
         ),
+        customerNumber: action.payload.customerNumber,
         error: false,
       };
     },

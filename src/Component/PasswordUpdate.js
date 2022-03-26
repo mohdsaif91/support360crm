@@ -21,7 +21,6 @@ function PasswordUpdate(props) {
 
   const updatePassword = () => {
     if (password.passwordChange === password.confirmPassword) {
-      console.log(open.data);
       const data = {
         employeeId: open.data._id,
         newPassword: password.passwordChange,

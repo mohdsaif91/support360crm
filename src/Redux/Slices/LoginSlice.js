@@ -70,7 +70,6 @@ export const updatePasswordFun = createAsyncThunk(
   "employee/updatePasswordFun",
   async (data, { dispatch, fulfillWithValue, rejectWithValue }) => {
     dispatch(startLoading());
-    console.log(data);
     return await LoginService.UpdatePassword(data)
       .then((res) => {
         dispatch(stopLoading());

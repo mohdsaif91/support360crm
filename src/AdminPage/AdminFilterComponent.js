@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDatePicker from "react-datepicker";
 import Select from "react-select";
 import moment from "moment";
@@ -10,9 +10,10 @@ import { getFilteredEmployeeData } from "../Redux/Slices/Admin/AdminCustomerSlic
 const initialFilter = {
   startDate: moment().startOf("day").toDate(),
   endDate: moment().endOf("day").toDate(),
-  employeeName: [],
-  agentName: "",
+  agentName: { label: "", value: "" },
   customerName: "",
+  customerPhoneNumber: { label: "", value: "" },
+  selectedcustomer: { label: "", value: "" },
 };
 
 export default function AdminFilterComponent() {
@@ -20,8 +21,6 @@ export default function AdminFilterComponent() {
 
   const employee = useSelector((state) => state.employee);
   const dispatch = useDispatch();
-
-  // console.log(employee);
 
   const employeeData =
     employee.allEmployee &&
@@ -35,39 +34,31 @@ export default function AdminFilterComponent() {
       return { value: m, label: m };
     });
 
-  const handleInputChange = (data, type) => {
-    let filterData = null;
+  const custonmerNumber =
+    employee.customerNumber &&
+    employee.customerNumber.map((m) => {
+      return { value: m, label: m };
+    });
 
-    console.log(type);
-    switch (true) {
-      case type === "startDate":
-        filterData = { ...filter, startDate: data };
-        setFilter({ ...filter, startDate: data });
-        break;
-      case type === "endDate":
-        filterData = { ...filter, endDate: data };
-        setFilter({ ...filter, endDate: data });
-        break;
-      case type === "agentName":
-        filterData = { ...filter, agentName: data };
-        setFilter({ ...filter, agentName: data });
-        break;
-      case type === "employeeText":
-        console.log("hi here");
-        filterData = { ...filter, employeeText: data };
-        setFilter({ ...filter, employeeText: data });
-        break;
-      default:
-        return filter;
+  useEffect(() => {
+    let newFilter = {
+      createdAt: {
+        $gte: filter.startDate,
+        $lte: filter.endDate,
+      },
+    };
+    if (filter.agentName && filter.agentName.value !== "") {
+      newFilter.agentName = filter.agentName.value;
     }
-    const { employeeName, ...restProps } = filterData;
-    const agentName = restProps?.agentName?.value;
-    const employeeText = restProps?.employeeText?.value;
-    restProps.agentName = agentName;
-    restProps.employeeText = employeeText;
-    console.log(restProps);
-    dispatch(getFilteredEmployeeData(restProps));
-  };
+    if (filter.selectedcustomer && filter.selectedcustomer.value !== "") {
+      newFilter.customerName = filter.selectedcustomer.value;
+    }
+    if (filter.customerPhoneNumber && filter.customerPhoneNumber.value !== "") {
+      newFilter.phoneNumber = filter.customerPhoneNumber.value;
+    }
+
+    dispatch(getFilteredEmployeeData(newFilter));
+  }, [dispatch, filter]);
 
   return (
     <div className="admin-filter-container">
@@ -77,7 +68,7 @@ export default function AdminFilterComponent() {
           dateFormat="dd/MM/yyyy HH:mm"
           className="date-picker-component"
           selected={filter.startDate}
-          onChange={(date) => handleInputChange(date, "startDate")}
+          onChange={(date) => setFilter({ ...filter, startDate: date })}
         />
       </div>
       <div className="date-container">
@@ -86,34 +77,42 @@ export default function AdminFilterComponent() {
           dateFormat="dd/MM/yyyy HH:mm"
           className="date-picker-component"
           selected={filter.endDate}
-          onChange={(date) => handleInputChange(date, "endDate")}
+          onChange={(date) => setFilter({ ...filter, endDate: date })}
         />
       </div>
       <div className="date-container">
-        <label>Employee Name</label>
+        <label>Agent Name</label>
         <Select
+          isClearable={true}
           value={filter.agentName}
           className="employee-select-component"
-          onChange={(date) => handleInputChange(date, "agentName")}
+          onChange={(value) => setFilter({ ...filter, agentName: value })}
           options={employeeData}
         />
       </div>
       <div className="date-container">
         <label>Customer Name</label>
         <Select
-          value={filter.employeeText}
+          isClearable={true}
+          value={filter.selectedcustomer}
           className="employee-select-component"
-          onChange={(data) => handleInputChange(data, "employeeText")}
+          onChange={(value) =>
+            setFilter({ ...filter, selectedcustomer: value })
+          }
           options={customerData}
         />
       </div>
       <div className="date-container">
         <label>Customer Number</label>
         <Select
-          value={filter.agentName}
+          isClearable={true}
+          placeholder="Select"
+          value={filter.customerPhoneNumber}
           className="employee-select-component"
-          onChange={(date) => handleInputChange(date, "agentName")}
-          options={employeeData}
+          onChange={(value) =>
+            setFilter({ ...filter, customerPhoneNumber: value })
+          }
+          options={custonmerNumber}
         />
       </div>
     </div>

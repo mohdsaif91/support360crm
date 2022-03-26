@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 
@@ -36,15 +36,12 @@ function App() {
     if (userData && !userState?.user) {
       dispatch(setUserData(userData));
     }
-    if (userData?.user?.role == "admin") {
+    if (userData?.user?.role === "admin") {
       navigate("/adminHome");
-    } else if (userData?.user?.role == "customer") {
-      navigate("/");
     }
-  }, [userState]);
+  }, [userState, navigate, dispatch]);
 
   const routesHtml = useMemo(() => {
-    console.log("useMEMO <");
     return (
       <Routes>
         <Route path="/" element={<Home />} />
@@ -71,17 +68,6 @@ function App() {
           {location.pathname !== "/login" && <Header />}
           {location.pathname.includes("admin") && <AdminHeader />}
           {routesHtml}
-          {/* <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/unAutorized" element={<UnAuthorized />} />
-            <Route path="/profile" element={<EmployeeProfile />} />
-
-            {/* AdminRoute */}
-          {/* <Route path="/adminHome" element={<AdminHome />} />
-            <Route path="/adminEmployee" element={<AdminEmployeeHome />} />
-            <Route path="/adminData" element={<AdminData />} />
-          </Routes> */}
         </>
       )}
     </div>

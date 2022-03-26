@@ -48,25 +48,26 @@ function AvatarDropdown() {
                 <div id="profile-name">{loginState?.user?.userName}</div>
               </div>
             </div>
-            <li className="user-menu__item" onClick={() => goToProfile()}>
-              <a className="user-menu-link" href="/#">
-                <img
-                  className="user-menu-icon"
-                  src={Profile}
-                  alt="trophy_icon"
-                />
-                <div>Profile</div>
-              </a>
-            </li>
+            {loginState?.user?.role !== "admin" && (
+              <li className="user-menu__item" onClick={() => goToProfile()}>
+                <div className="user-menu-link">
+                  <img
+                    className="user-menu-icon"
+                    src={Profile}
+                    alt="trophy_icon"
+                  />
+                  <div>Profile</div>
+                </div>
+              </li>
+            )}
             <div className="footer">
               <li className="user-menu__item">
-                <a
+                <div
                   className="user-menu-link logout-link"
-                  href="/#"
                   onClick={() => logOutUser()}
                 >
                   Logout
-                </a>
+                </div>
               </li>
             </div>
           </ul>

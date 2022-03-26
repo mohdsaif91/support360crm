@@ -24,12 +24,16 @@ export default function AdminData() {
     if (!employee.allEmployee) {
       dispatch(getEmployees());
     }
-  }, [employee]);
+  }, [dispatch, employee]);
 
   useEffect(() => {
-    const { employeeName, ...restProps } = filter;
-    dispatch(getFilteredEmployeeData(restProps));
-  }, []);
+    let newFilter = {};
+    newFilter.createdAt = {
+      $gte: filter.startDate,
+      $lte: filter.endDate,
+    };
+    dispatch(getFilteredEmployeeData(newFilter));
+  }, [dispatch, filter]);
 
   return (
     <div className="admin-page-margin">
