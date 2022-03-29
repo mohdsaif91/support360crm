@@ -5,6 +5,7 @@ import Table from "../Component/Table";
 
 export default function AdminTable() {
   const adminCustomer = useSelector((state) => state.adminCustomer);
+
   const role = useSelector((state) => state.login);
 
   return (

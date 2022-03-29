@@ -28,26 +28,7 @@
   justify-content: space-around;
   margin-bottom: 32px;
   font-family: Verdana, sans-serif;
-  .card {
-    border-radius: 10px;
-    padding: 12px;
-    text-align: center;
-    background-color: #ffffff;
-    border: 0.5px solid #d0d0d0;
-    -webkit-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
-    box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
-    .card-heading {
-      font-size: 20px;
-    }
-    .card-count {
-      padding: 24px;
-      font-size: 24px;
-    }
-    .total {
-      font-size: 32px !important;
-    }
-  }
+
   .btn-daily,
   .btn-monthly,
   .btn-yearly {
@@ -59,5 +40,26 @@
       color: #333;
       background-color: #ffffff;
     }
+  }
+}
+
+.card {
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+  background-color: #ffffff;
+  border: 0.5px solid #d0d0d0;
+  -webkit-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+  .card-heading {
+    font-size: 20px;
+  }
+  .card-count {
+    padding: 24px;
+    font-size: 24px;
+  }
+  .total {
+    font-size: 32px !important;
   }
 }

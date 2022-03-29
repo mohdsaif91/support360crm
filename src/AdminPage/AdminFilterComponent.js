@@ -20,6 +20,7 @@ export default function AdminFilterComponent() {
   const [filter, setFilter] = useState({ ...initialFilter });
 
   const employee = useSelector((state) => state.employee);
+  const adminCustomer = useSelector((state) => state.adminCustomer);
   const dispatch = useDispatch();
 
   const employeeData =
@@ -114,6 +115,12 @@ export default function AdminFilterComponent() {
           }
           options={custonmerNumber}
         />
+      </div>
+      <div className="card total-container">
+        <div className="card-heading">Applied Filter count</div>
+        <div className="card-count total">
+          {adminCustomer.filteredCustomer?.filterData.length}
+        </div>
       </div>
     </div>
   );
